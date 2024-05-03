@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Post</title>
+</head>
+<body>
+    <h1>Delete Post</h1>
+    <form action="DeletePost.php" method="post">
+        <table>
+            <tr>
+                <th>Post</th>
+                <th>Author</th>
+                <th>Delete?</th>
+            </tr>
+            <?php
+            // Connect to database and fetch all posts
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "exp";
+
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $sql = "SELECT post_id, content, author_id FROM posts";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    echo "<tr><td>".$row["content"]."</td><td>".$row["author_id"]."</td><td><input type='checkbox' name='posts[]' value='".$row["post_id"]."'></td></tr>";
+                }
+            }
+            $conn->close();
+            ?>
+        </table>
+        <button type="submit">Delete Selected Posts</button>
+    </form>
+</body>
+</html>
